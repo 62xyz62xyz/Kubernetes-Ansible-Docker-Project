@@ -1,0 +1,75 @@
+#Create User on Jenkins, Docker and ansibel instances
+#install Java on all instances
+apt update
+apt install opnjdk-17-jre
+vi /etc/ssh/sshd_config
+PasswordAuthentication yes
+serice sshd reload
+
+# Maven install on jenkins instance
+apt update 
+cd /opt 
+wget apache.tar.gz
+tar -xvzf apache.tar.gz
+mv apache.maver. maven
+vi /etc/profile
+M2_HOME = /opt/maven
+M2=$M2_HOME/bin
+PATH=$PATH:$JAVA_HOME:$M2_HOME:$M2_$HOME/bin
+export PATH
+source /etc/profile
+echo $PATH
+echo $M2
+
+#install ejnkins on jenkins instance
+#follow all from jenkins website
+vi /etc/sudoers
+jenkins ALL=(ALL) NOPASSWD:ALL
+systemctl restart jenkins
+
+#jenkins Plugins 
+# Github, Maven Invoker, Maven Integration, Publish over ssh
+
+#Ansible Installation on ansible instance
+apt install software-properties-common
+apt-add-repository --yes --update ppa:ansible/ansible
+apt install ansible -y
+ansible --version
+vi /etc/ansible/hosts
+[all_hosts]
+localhost
+<private-IP-docker>
+# create a directory under /opt in Ansible server rsing user ansadmin(sudo su -ansadmin)
+
+cd /opt
+sudo mkdir docker
+sudo chown -R ansadmin:ansadmin /opt/docker
+ls -l /opt
+
+# Docker installation on ansible and docker instances
+apt install docker.io 
+dockr version
+service docker start
+service docker status
+usermod -aG docker ansadmin 
+
+# Log into ansible instance using user ansadmin and genereate ssh key 
+sudo su- ansadmin
+ssh-keygen
+
+ssh-copy-id ansadmin@private-ip-docker-server
+ssh ansadmin@private-ip-docker-server
+exit
+
+ssh-copy-id localhost
+
+ansible all -m ping
+
+#Connection Between Jenkins and Ansible set Maven Path
+
+
+
+#Jenkins instance Name - Jenkins
+#Ansible Instance Name - ansible-cotrol-node
+#Docker Instance nmae - docker -host
+Generate ssh and key 
